@@ -10,7 +10,7 @@ export class RecipeListComponent implements OnInit {
 
   @Output() selected = new EventEmitter<Recipe>();
   recipes : Recipe[] = [
-    new Recipe("test","test description","https://elavegan.com/wp-content/uploads/2018/01/peanut-butter-noodles-vegan-gluten-free-with-veggies.jpg")
+    new Recipe("test","test description","https://elavegan.com/wp-content/uploads/2018/01/peanut-butter-noodles-vegan-gluten-free-with-veggies.jpg"),new Recipe("test2","test2 description","https://elavegan.com/wp-content/uploads/2018/01/peanut-butter-noodles-vegan-gluten-free-with-veggies.jpg")
   ];
 
   constructor() { }
