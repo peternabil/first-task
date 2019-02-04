@@ -1,26 +1,35 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Recipe } from '../recipe.model'
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
+import { Subscription } from 'rxjs/subscription';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.css']
+  styleUrls: ['./recipe-list.component.css'],
+  //providers: [RecipeService]
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
 
-  @Output() selected = new EventEmitter<Recipe>();
-  recipes : Recipe[] = [
-    new Recipe("test","test description","https://elavegan.com/wp-content/uploads/2018/01/peanut-butter-noodles-vegan-gluten-free-with-veggies.jpg"),new Recipe("test2","test2 description","https://elavegan.com/wp-content/uploads/2018/01/peanut-butter-noodles-vegan-gluten-free-with-veggies.jpg")
-  ];
+  recipes: Recipe[];
+  subscription:Subscription;
 
-  constructor() { }
+  constructor(private rs:RecipeService,private router:Router,private route:ActivatedRoute) { }
 
   ngOnInit() {
+    this.subscription = this.rs.recipesChanged.subscribe(
+      (recipes:Recipe[])=>{
+        this.recipes = recipes;
+      }
+    );
+    this.recipes = this.rs.getRecipes();
   }
 
-  onSelect(recipe:Recipe) {
-    this.selected.emit(recipe);
+  onNewR(){
+    this.router.navigate(['new'],{relativeTo:this.route})
   }
-
-
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
 }
